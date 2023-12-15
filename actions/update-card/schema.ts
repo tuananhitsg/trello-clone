@@ -11,14 +11,16 @@ export const UpdateCard = z.object({
       .min(3, {
         message: 'Description is too short',
       })
-  ),//TODO: seems like this no need to check the description
-  title: z
-    .string({
-      required_error: 'Title is required',
-      invalid_type_error: 'Title is required',
-    })
-    .min(3, {
-      message: 'Title is too short',
-    }),
+  ), //TODO: seems like this no need to check the description
+  title: z.optional(
+    z
+      .string({
+        required_error: 'Title is required',
+        invalid_type_error: 'Title is required',
+      })
+      .min(3, {
+        message: 'Title is too short',
+      })
+  ),
   id: z.string(),
 })
