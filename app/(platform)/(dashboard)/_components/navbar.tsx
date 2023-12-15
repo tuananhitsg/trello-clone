@@ -21,7 +21,7 @@ export const Navbar = () => {
             size="sm"
             className="rounded-sm hidden md:block h-auto py-1.5 px-2"
           >
-            Create
+            Create board
           </Button>
         </FormPopover>
         <FormPopover>
