@@ -3,7 +3,7 @@
 import { ElementRef, useRef } from 'react'
 import { toast } from 'sonner'
 import { X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 import {
   Popover,
@@ -14,45 +14,57 @@ import {
 import { useAction } from '@/hooks/use-action'
 import { Button } from '@/components/ui/button'
 import { createBoard } from '@/actions/create-board'
-//import { useProModal } from "@/hooks/use-pro-modal";
+import { updateCard } from '@/actions/update-card'
 
 import { FormInput } from './form-input'
 import { FormSubmit } from './form-submit'
 import { FormPicker } from './form-picker'
+import { useQueryClient } from '@tanstack/react-query'
+import { CardWithList } from '@/type'
 
-interface FormPopoverProps {
+interface FormCoverProps {
   children: React.ReactNode
   side?: 'left' | 'right' | 'top' | 'bottom'
   align?: 'start' | 'center' | 'end'
   sideOffset?: number
+  data: CardWithList
 }
 
-export const FormPopover = ({
+export const FormCover = ({
   children,
   side = 'bottom',
   align,
   sideOffset = 0,
-}: FormPopoverProps) => {
+  data,
+}: FormCoverProps) => {
   const router = useRouter()
+  const param = useParams()
+  const queryClient = useQueryClient()
+
   const closeRef = useRef<ElementRef<'button'>>(null)
 
-  const { execute, fieldErrors } = useAction(createBoard, {
+  const { execute, fieldErrors } = useAction(updateCard, {
     onSuccess: (data) => {
-      toast.success('Board created!')
-      closeRef.current?.click()
-      router.push(`/board/${data.id}`)
+      queryClient.invalidateQueries({
+        queryKey: ['card', data.id],
+      })
+      toast.success(`Card "${data.title}"'s cover updated`)
     },
     onError: (error) => {
       toast.error(error)
     },
   })
+  const onAddCover = (formData: FormData) => {
+    console.log('data', data)
 
-  const onSubmit = (formData: FormData) => {
-    const title = formData.get('title') as string
-    const image = formData.get('image') as string
-    console.log('image', image)
+    const coverImg = formData.get('image') as string
+    const boardId = param.boardId as string
 
-    execute({ title, image })
+    execute({
+      id: data.id,
+      boardId,
+      coverImg,
+    })
   }
 
   return (
@@ -65,7 +77,7 @@ export const FormPopover = ({
         sideOffset={sideOffset}
       >
         <div className="text-sm font-medium text-center text-neutral-600 pb-4">
-          Create board
+          Cover
         </div>
         <PopoverClose ref={closeRef} asChild>
           <Button
@@ -75,17 +87,19 @@ export const FormPopover = ({
             <X className="h-4 w-4" />
           </Button>
         </PopoverClose>
-        <form action={onSubmit} className="space-y-4">
+        <form action={onAddCover} className="space-y-4">
           <div className="space-y-4">
             <FormPicker id="image" errors={fieldErrors} />
-            <FormInput
+            {/* <FormInput
               id="title"
               label="Board title"
               type="text"
               errors={fieldErrors}
-            />
+            /> */}
           </div>
-          <FormSubmit className="w-full">Create</FormSubmit>
+          <FormSubmit className="w-full">
+            {data.imageID ? 'Update' : 'Add'}
+          </FormSubmit>
         </form>
       </PopoverContent>
     </Popover>

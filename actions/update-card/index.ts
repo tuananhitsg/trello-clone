@@ -20,7 +20,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     }
   }
 
-  const { id, boardId, ...values } = data
+  const { id, boardId, coverImg, ...values } = data
+  const [imageID, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
+    coverImg!.split('|')
   let card
 
   try {
@@ -34,6 +36,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         },
       },
       data: {
+        imageID,
+        imageThumbUrl,
+        imageFullUrl,
+        imageLinkHTML,
+        imageUserName,
         ...values,
       },
     })

@@ -2,6 +2,12 @@ import { z } from 'zod'
 
 export const UpdateCard = z.object({
   boardId: z.string(),
+  coverImg: z.optional(
+    z.string({
+      required_error: 'coverImg is required',
+      invalid_type_error: 'coverImg is required',
+    })
+  ),
   description: z.optional(
     z
       .string({

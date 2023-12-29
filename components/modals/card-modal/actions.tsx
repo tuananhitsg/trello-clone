@@ -1,7 +1,7 @@
 'use client'
 
 import { toast } from 'sonner'
-import { Copy, Trash } from 'lucide-react'
+import { Copy, PanelTop, Trash } from 'lucide-react'
 import { useParams } from 'next/navigation'
 
 import { CardWithList } from '@/type'
@@ -11,6 +11,8 @@ import { copyCard } from '@/actions/copy-card'
 import { deleteCard } from '@/actions/delete-card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useCardModel } from '@/hooks/use-card-modal'
+import { FormCover } from '@/components/form/form-cover'
+import { updateCard } from '@/actions/update-card'
 
 interface ActionsProps {
   data: CardWithList
@@ -87,6 +89,12 @@ export const Actions = ({ data }: ActionsProps) => {
         <Trash className="h-4 w-4 mr-2" />
         Delete
       </Button>
+      <FormCover data={data} align="start" side="right" sideOffset={30}>
+        <Button variant="gray" className="w-full justify-start" size="inline">
+          <PanelTop className="h-4 w-4 mr-2" />
+          {data.imageID ? 'Update cover image' : 'Add cover image'}
+        </Button>
+      </FormCover>
     </div>
   )
 }
