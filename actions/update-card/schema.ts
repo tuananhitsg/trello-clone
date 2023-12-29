@@ -2,10 +2,35 @@ import { z } from 'zod'
 
 export const UpdateCard = z.object({
   boardId: z.string(),
-  coverImg: z.optional(
+
+  imageID: z.optional(
     z.string({
-      required_error: 'coverImg is required',
-      invalid_type_error: 'coverImg is required',
+      required_error: 'imageID is required',
+      invalid_type_error: 'imageID is required',
+    })
+  ),
+  imageThumbUrl: z.optional(
+    z.string({
+      required_error: 'imageThumbUrl is required',
+      invalid_type_error: 'imageThumbUrl is required',
+    })
+  ),
+  imageFullUrl: z.optional(
+    z.string({
+      required_error: 'imageFullUrl is required',
+      invalid_type_error: 'imageFullUrl is required',
+    })
+  ),
+  imageLinkHTML: z.optional(
+    z.string({
+      required_error: 'imageLinkHTML is required',
+      invalid_type_error: 'imageLinkHTML is required',
+    })
+  ),
+  imageUserName: z.optional(
+    z.string({
+      required_error: 'imageUserName is required',
+      invalid_type_error: 'imageUserName is required',
     })
   ),
   description: z.optional(

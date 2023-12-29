@@ -55,15 +55,20 @@ export const FormCover = ({
     },
   })
   const onAddCover = (formData: FormData) => {
-    console.log('data', data)
-
     const coverImg = formData.get('image') as string
+
+    const [imageID, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
+      coverImg!.split('|')
     const boardId = param.boardId as string
 
     execute({
       id: data.id,
       boardId,
-      coverImg,
+      imageID,
+      imageThumbUrl,
+      imageFullUrl,
+      imageLinkHTML,
+      imageUserName,
     })
   }
 
