@@ -18,6 +18,7 @@ interface CardFormProps {
   disableEditing: () => void
   isEditing: boolean
 }
+
 export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
   ({ listId, disableEditing, enableEditing, isEditing }, ref) => {
     const params = useParams()
@@ -34,7 +35,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
     })
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'escape') {
+      if (event.key === 'Escape') {
         disableEditing()
       }
     }

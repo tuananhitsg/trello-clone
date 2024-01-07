@@ -11,6 +11,7 @@ import { updateCard } from '@/actions/update-card'
 import { CardWithList } from '@/type'
 import { Skeleton } from '@/components/ui/skeleton'
 import { FormInput } from '@/components/form/form-input'
+import { useEventListener } from 'usehooks-ts'
 
 interface HeaderProps {
   data: CardWithList
@@ -19,7 +20,21 @@ interface HeaderProps {
 export const Header = ({ data }: HeaderProps) => {
   const queryClient = useQueryClient()
   const param = useParams()
+  const inputRef = useRef<ElementRef<'input'>>(null)
 
+  const [title, setTitle] = useState(data.title)
+  const [isEditing, setIsEditing] = useState(false)
+
+  const enableEditing = () => {
+    setIsEditing(true)
+    setTimeout(() => {
+      inputRef.current?.focus()
+      //inputRef.current?.select()
+    })
+  }
+  const disableEditing = () => {
+    setIsEditing(false)
+  }
   const { execute } = useAction(updateCard, {
     onSuccess: (data) => {
       queryClient.invalidateQueries({
@@ -31,18 +46,16 @@ export const Header = ({ data }: HeaderProps) => {
 
       toast.success(`Renamed to ${data.title}`)
       setTitle(data.title)
+      disableEditing()
     },
     onError: (error) => {
       toast.error(error)
     },
   })
 
-  const inputRef = useRef<ElementRef<'input'>>(null)
-
-  const [title, setTitle] = useState(data.title)
-
   const onBlur = () => {
     inputRef.current?.form?.requestSubmit()
+    disableEditing()
   }
   const onSubmit = (formData: FormData) => {
     const title = formData.get('title') as string
@@ -56,20 +69,37 @@ export const Header = ({ data }: HeaderProps) => {
       id: data.id,
     })
   }
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      disableEditing()
+    }
+  }
+
+  useEventListener('keydown', onKeyDown)
   return (
     <div className="flex items-start gap-x-3 mb-6 w-full">
       <Layout className="h-5 w-5 mt-1 text-neutral-700" />
-      <div className="w-full">
-        <form action={onSubmit}>
-          <FormInput
-            ref={inputRef}
-            onBlur={onBlur}
-            id="title"
-            defaultValue={title}
-            className="font-semibold text-xl px-1 text-neutral-700 bg-transparent border-transparent relative
-          -left-1.5 w-[95%] focus-visible:bg-white focus-visible:border-input mb-0.5 truncate"
-          />
-        </form>
+      <div className="w-full relative">
+        {isEditing ? (
+          <form action={onSubmit}>
+            <FormInput
+              ref={inputRef}
+              onBlur={onBlur}
+              id="title"
+              defaultValue={title}
+              className="supports-[overflow-wrap:anywhere]:[overflow-wrap:anywhere] font-semibold text-xl px-1 text-neutral-700 bg-transparent border-transparent relative
+          -left-1.5 w-[95%] focus-visible:bg-white focus-visible:border-input mb-0.5 "
+            />
+          </form>
+        ) : (
+          <div
+            onClick={enableEditing}
+            className="supports-[overflow-wrap:anywhere]:[overflow-wrap:anywhere] font-semibold text-xl px-1 text-neutral-700 
+            bg-transparent -left-1.5 w-[95%] mb-0.5"
+          >
+            {title}
+          </div>
+        )}
         <p className="text-sm text-muted-foreground">
           in list <span className="underline">{data.list.title}</span>
         </p>

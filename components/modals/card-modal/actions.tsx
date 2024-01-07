@@ -1,7 +1,7 @@
 'use client'
 
 import { toast } from 'sonner'
-import { Copy, PanelTop, Trash } from 'lucide-react'
+import { Copy, PanelTop, Trash, Layout } from 'lucide-react'
 import { useParams } from 'next/navigation'
 
 import { CardWithList } from '@/type'
@@ -12,13 +12,15 @@ import { deleteCard } from '@/actions/delete-card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useCardModel } from '@/hooks/use-card-modal'
 import { FormCover } from '@/components/form/form-cover'
-import { updateCard } from '@/actions/update-card'
+import { cn } from '@/lib/utils'
 
 interface ActionsProps {
   data: CardWithList
+  isQuickEdit?: boolean
+  className?: string
 }
 
-export const Actions = ({ data }: ActionsProps) => {
+export const Actions = ({ data, isQuickEdit, className }: ActionsProps) => {
   const params = useParams()
   const cardModal = useCardModel()
 
@@ -48,6 +50,10 @@ export const Actions = ({ data }: ActionsProps) => {
     }
   )
 
+  const onOpen = () => {
+    cardModal.onOpen(data.id)
+  }
+
   const onCopy = () => {
     const boardId = params.boardId as string
 
@@ -67,8 +73,21 @@ export const Actions = ({ data }: ActionsProps) => {
   }
 
   return (
-    <div className="space-y-2 mt-2">
-      <p className="text-xs font-semibold">Actions</p>
+    <div className={cn('space-y-2 mt-2', className)}>
+      {!isQuickEdit ? (
+        <p className="text-xs font-semibold">Actions</p>
+      ) : (
+        <Button
+          onClick={() => cardModal.onOpen(data.id)}
+          disabled={isLoadingCopy}
+          variant="gray"
+          className="w-full justify-start"
+          size="inline"
+        >
+          <Layout className="h-4 w-4 mr-2" />
+          Open card
+        </Button>
+      )}
       <Button
         onClick={onCopy}
         disabled={isLoadingCopy}
@@ -89,12 +108,14 @@ export const Actions = ({ data }: ActionsProps) => {
         <Trash className="h-4 w-4 mr-2" />
         Delete
       </Button>
-      <FormCover data={data} align="start" side="right" sideOffset={30}>
-        <Button variant="gray" className="w-full justify-start" size="inline">
-          <PanelTop className="h-4 w-4 mr-2" />
-          {data.imageID ? 'Update cover image' : 'Add cover image'}
-        </Button>
-      </FormCover>
+      {data.imageID && !isQuickEdit ? null : (
+        <FormCover data={data} align="start" side="right" sideOffset={30}>
+          <Button variant="gray" className="w-full justify-start" size="inline">
+            <PanelTop className="h-4 w-4 mr-2" />
+            {isQuickEdit ? 'Change cover' : 'Add cover'}
+          </Button>
+        </FormCover>
+      )}
     </div>
   )
 }

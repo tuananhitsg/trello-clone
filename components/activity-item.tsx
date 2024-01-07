@@ -16,10 +16,11 @@ export const ActivityItem = ({ data }: ActivityItemProps) => {
         <AvatarImage src={data.userImage} />
       </Avatar>
       <div className="flex flex-col space-y-0.5">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground supports-[overflow-wrap:anywhere]:[overflow-wrap:anywhere]">
           <span className="font-semibold lowercase text-neutral-700">
             {data.userName}
-          </span>{generateLogMessage(data)}
+          </span>
+          {generateLogMessage(data)}
         </p>
         <p className="text-xs text-muted-foreground">
           {format(new Date(data.createdAt), "MMM d, yyyy 'at' h:mm a")}

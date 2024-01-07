@@ -43,8 +43,8 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
     const { pending } = useFormStatus()
 
     return (
-      <div className="space-y-2 w-full">
-        <div className="space-y-1 w-full">
+      <div className="space-y-2 w-full relative">
+        <div className="space-y-1 w-full ">
           {label ? (
             <Label
               htmlFor={id}
@@ -54,6 +54,8 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
             </Label>
           ) : null}
           <Textarea
+            spellCheck={false}
+            dir="auto"
             onKeyDown={onKeyDown}
             onBlur={onBlur}
             onClick={onClick}

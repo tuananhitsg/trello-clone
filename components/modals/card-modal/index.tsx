@@ -36,7 +36,11 @@ export const CardModal = () => {
         <div className="flex flex-col">
           <DialogHeader>
             {!coverData ? null : (
-              <Cover isCoverHeader data={cardData} className="rounded-t-md h-[160px]" />
+              <Cover
+                isCoverHeader
+                data={cardData}
+                className="relative rounded-t-md h-[160px]"
+              />
             )}
           </DialogHeader>
         </div>

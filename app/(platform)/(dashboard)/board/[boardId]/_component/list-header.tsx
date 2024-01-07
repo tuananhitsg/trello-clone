@@ -1,13 +1,13 @@
-'use-client'
+'use client'
 
+import { toast } from 'sonner'
 import { List } from '@prisma/client'
 import { useEventListener } from 'usehooks-ts'
-import { ElementRef, useRef, useState } from 'react'
+import { useState, useRef, ElementRef } from 'react'
 
-import { FormInput } from '@/components/form/form-input'
 import { useAction } from '@/hooks/use-action'
 import { updateList } from '@/actions/update-list'
-import { toast } from 'sonner'
+import { FormInput } from '@/components/form/form-input'
 
 import { ListOptions } from './list-options'
 
@@ -27,7 +27,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
     setIsEditing(true)
     setTimeout(() => {
       inputRef.current?.focus()
-      inputRef.current?.select()
+      //inputRef.current?.select()
     })
   }
 
@@ -37,7 +37,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
 
   const { execute } = useAction(updateList, {
     onSuccess: (data) => {
-      toast.success(`Renamed to ${data.title}`)
+      toast.success(`Renamed to "${data.title}"`)
       setTitle(data.title)
       disableEditing()
     },
@@ -54,6 +54,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
     if (title === data.title) {
       return disableEditing()
     }
+
     execute({
       title,
       id,
@@ -63,37 +64,42 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
 
   const onBlur = () => {
     formRef.current?.requestSubmit()
+    setIsEditing(false)
   }
 
-  const onKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      formRef.current?.requestSubmit()
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      //formRef.current?.requestSubmit()
+      disableEditing()
     }
   }
 
   useEventListener('keydown', onKeyDown)
 
   return (
-    <div className="pt-2 px-2 text-sm font-semibold flex justify-between items-start gap-x-2">
+    <div className="relative pt-2 px-2 text-sm font-semibold flex flex-row justify-between items-start- gap-x-2">
       {isEditing ? (
-        <form ref={formRef} action={handleSubmit} className="flex-1 px-[2px]">
+        <form
+          ref={formRef}
+          action={handleSubmit}
+          className="flex-1 px-[2px] break-words min-w-0"
+        >
           <input hidden id="id" name="id" value={data.id} />
           <input hidden id="boardId" name="boardId" value={data.boardId} />
           <FormInput
             ref={inputRef}
             onBlur={onBlur}
             id="title"
-            placeholder="Enter list title..."
+            placeholder="Enter list title.."
             defaultValue={title}
-            className="text-sm px-[7px] py-1 h-7 font-medium border-transparent hover:border-input focus:border-input
-             transition truncate bg-transparent focus:bg-white"
+            className="text-sm px-[7px] py-1 h-auto font-medium border-transparent hover:border-input focus:border-input transition bg-transparent focus:bg-white"
           />
           <button type="submit" hidden />
         </form>
       ) : (
         <div
           onClick={enableEditing}
-          className="w-full text-sm px-2.5 py-1 font-medium border-transparent"
+          className="supports-[overflow-wrap:anywhere]:[overflow-wrap:anywhere] w-full text-sm px-2.5 py-1 h-auto font-medium border-transparent"
         >
           {title}
         </div>
