@@ -13,7 +13,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useCardModel } from '@/hooks/use-card-modal'
 import { FormCover } from '@/components/form/form-cover'
 import { cn } from '@/lib/utils'
-
 interface ActionsProps {
   data: CardWithList
   isQuickEdit?: boolean

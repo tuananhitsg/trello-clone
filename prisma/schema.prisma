@@ -1,18 +1,18 @@
-datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
+// prisma/schema.prisma
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+
 model Board {
-  id            String @id @default(uuid())
-  orgId         String
-  title         String
-  
+  id    String @id @default(uuid())
+  orgId String
+  title String
+
   imageID       String
   imageThumbUrl String @db.Text
   imageFullUrl  String @db.Text
