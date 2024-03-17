@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import localFont from 'next/font/local'
 import { Poppins } from 'next/font/google'
-import { Medal } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -20,28 +19,26 @@ const MarketingPage = () => {
           headingFont.className
         )}
       >
-        <h1 className="text-3xl md:text-6xl text-center text-neutral-800 mb-6">
-          Hello helps team move
+        <h1 className="text-3xl md:text-6xl text-center text-white mb-6">
+          Hello brings all your
         </h1>
         <div
-          className="text-3xl md:text-6xl bg-gradient-to-r from-fuchsia-600 to-pink-600 text-white px-4 p-2 
+          className="text-3xl md:text-6xl px-4 p-2 
         rounded-md pb-4 w-fit"
         >
-          work forward.
+          tasks, teammates, and tools together
         </div>
       </div>
       <div
         className={cn(
-          'text-sm md:text-xl text-neutral-400 mt-4 max-w-xs md:max-w-2xl text-center mx-auto',
+          'text-sm md:text-xl text-white mt-4 max-w-xs md:max-w-2xl text-center mx-auto',
           textFont.className
         )}
       >
-        Collaborate, manage projects, and reach new productivity peaks. From
-        high rirses to the home office, the way your team works is unique -
-        accomplish it all with Hello.
+        Keep everything in the same place—even if your team isn’t.
       </div>
       <Button className="mt-6" size="lg" asChild>
-        <Link href="/sign-up"> Get Hello for free</Link>
+        <Link href="/sign-up"> Sign up - it’s free!</Link>
       </Button>
     </div>
   )
